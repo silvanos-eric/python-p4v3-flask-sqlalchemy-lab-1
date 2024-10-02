@@ -26,12 +26,7 @@ def index():
 def earthquakes(id):
     earthquake = Earthquake.query.filter_by(id=id).first()
     if earthquake:
-        return {
-            "id": earthquake.id,
-            "location": earthquake.location,
-            "magnitude": earthquake.magnitude,
-            "year": earthquake.year
-        }
+        return earthquake.to_dict()
     return {"message": f"Earthquake {id} not found."}, 404
 
 
@@ -41,14 +36,8 @@ def earthquake_magnitude(magnitude):
     count = len(quakes)
     if count > 0:
         return {
-            "count":
-            count,
-            "quakes": [{
-                "id": quake.id,
-                "location": quake.location,
-                "magnitude": quake.magnitude,
-                "year": quake.year
-            } for quake in quakes]
+            "count": count,
+            "quakes": [quake.to_dict() for quake in quakes]
         }
     return {"count": count, "quakes": quakes}
 
