@@ -35,5 +35,23 @@ def earthquakes(id):
     return {"message": f"Earthquake {id} not found."}, 404
 
 
+@app.route("/earthquakes/magnitude/<float:magnitude>")
+def earthquake_magnitude(magnitude):
+    quakes = Earthquake.query.filter(Earthquake.magnitude >= magnitude).all()
+    count = len(quakes)
+    if count > 0:
+        return {
+            "count":
+            count,
+            "quakes": [{
+                "id": quake.id,
+                "location": quake.location,
+                "magnitude": quake.magnitude,
+                "year": quake.year
+            } for quake in quakes]
+        }
+    return {"count": count, "quakes": quakes}
+
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
